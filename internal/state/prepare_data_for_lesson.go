@@ -39,10 +39,8 @@ func (s StatePrepareDataForLesson) Execute(sm *StateMachine) (State, error) {
 }
 
 func PrepareDataForLesson(wordList []model.WordEntry) ([]Word, error) {
-	wordCount := len(wordList)
-
 	// shuffle indexes
-	indexes := make([]int, wordCount)
+	indexes := make([]int, len(wordList))
 	for i := range indexes {
 		indexes[i] = i
 	}
