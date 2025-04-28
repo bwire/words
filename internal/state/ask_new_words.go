@@ -18,6 +18,41 @@ const (
 
 type StateAskNewWords struct{}
 
+func (s StateAskNewWords) Execute(sm *StateMachine) (State, error) {
+	reader := bufio.NewReader(os.Stdin)
+
+	ok, err := askYesNo(reader, "Would you like to add a new phrase (y/n)?")
+	if err != nil {
+		return nil, err
+	}
+	if !ok {
+		return StatePersistResult{}, nil
+	}
+
+	enWord, err := askWord(reader, "Enter a new english word (phrase):")
+	if err != nil {
+		fmt.Println(msgCancelledAdding)
+		return StatePersistResult{}, nil
+	}
+
+	ruWord, err := askWord(reader, "Enter the meaning of the new word (phrase):")
+	if err != nil {
+		fmt.Println(msgCancelledAdding)
+		return StatePersistResult{}, nil
+	}
+
+	newEntry := model.WordEntry{
+		Word:      enWord,
+		Meaning:   ruWord,
+		StartDate: time.Now().Format(config.DateFormat),
+		HitsCount: 0,
+		Progress:  0,
+	}
+
+	sm.ActiveWords = append(sm.ActiveWords, newEntry)
+	return StatePersistResult{}, nil
+}
+
 func askYesNo(reader *bufio.Reader, question string) (bool, error) {
 	fmt.Println(question)
 	for {
@@ -68,39 +103,4 @@ func normalizeYesNo(answer string) (bool, error) {
 	default:
 		return false, fmt.Errorf("bad input")
 	}
-}
-
-func (s StateAskNewWords) Execute(sm *StateMachine) (State, error) {
-	reader := bufio.NewReader(os.Stdin)
-
-	ok, err := askYesNo(reader, "Would you like to add a new phrase (y/n)?")
-	if err != nil {
-		return nil, err
-	}
-	if !ok {
-		return StatePersistResult{}, nil
-	}
-
-	enWord, err := askWord(reader, "Enter a new english word (phrase):")
-	if err != nil {
-		fmt.Println(msgCancelledAdding)
-		return StatePersistResult{}, nil
-	}
-
-	ruWord, err := askWord(reader, "Enter the meaning of the new word (phrase):")
-	if err != nil {
-		fmt.Println(msgCancelledAdding)
-		return StatePersistResult{}, nil
-	}
-
-	newEntry := model.WordEntry{
-		Word:      enWord,
-		Meaning:   ruWord,
-		StartDate: time.Now().Format(config.DateFormat),
-		HitsCount: 0,
-		Progress:  0,
-	}
-
-	sm.ActiveWords = append(sm.ActiveWords, newEntry)
-	return StatePersistResult{}, nil
 }
