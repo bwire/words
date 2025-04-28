@@ -25,5 +25,5 @@ func (s StateValidateDictionary) Execute(sm *StateMachine) (State, error) {
 		}
 	}
 
-	return StatePersistResult{}, nil
+	return StateAskNewWords{}, nil
 }

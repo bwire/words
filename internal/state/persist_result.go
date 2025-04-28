@@ -11,7 +11,7 @@ type StatePersistResult struct{}
 func (s StatePersistResult) Execute(sm *StateMachine) (State, error) {
 	fmt.Println("Persisting results...")
 
-	err := io.PersistResult(config.Vocabulary, sm.ActiveWords)
+	err := io.PersistResultToFile(config.Vocabulary, sm.ActiveWords)
 	if err != nil {
 		return nil, fmt.Errorf("failed to save dictitionary: %w", err)
 	}
