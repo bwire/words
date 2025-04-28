@@ -27,19 +27,19 @@ func (s StateAskNewWords) Execute(sm *StateMachine) (State, error) {
 	}
 	if !ok {
 		fmt.Println()
-		return StatePersistResult{}, nil
+		return StatePrepareDataForLesson{}, nil
 	}
 
 	enWord, err := askWord(reader, "Enter a new english word (phrase):")
 	if err != nil {
 		fmt.Println(msgCancelledAdding)
-		return StatePersistResult{}, nil
+		return nil, err
 	}
 
 	ruWord, err := askWord(reader, "Enter the meaning of the new word (phrase):")
 	if err != nil {
 		fmt.Println(msgCancelledAdding)
-		return StatePersistResult{}, nil
+		return nil, err
 	}
 
 	newEntry := model.WordEntry{
@@ -51,7 +51,7 @@ func (s StateAskNewWords) Execute(sm *StateMachine) (State, error) {
 	}
 
 	sm.ActiveWords = append(sm.ActiveWords, newEntry)
-	return StatePersistResult{}, nil
+	return StatePrepareDataForLesson{}, nil
 }
 
 func askYesNo(reader *bufio.Reader, question string) (bool, error) {
