@@ -17,5 +17,7 @@ func (s StateLoadWords) Execute(sm *StateMachine) (State, error) {
 	}
 
 	sm.ActiveWords = words
+
+	fmt.Printf("Active dictionary conatins %v words and phrases for learning!\n\n", len(sm.ActiveWords))
 	return StateValidateDictionary{}, nil
 }

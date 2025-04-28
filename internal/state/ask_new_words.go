@@ -26,6 +26,7 @@ func (s StateAskNewWords) Execute(sm *StateMachine) (State, error) {
 		return nil, err
 	}
 	if !ok {
+		fmt.Println()
 		return StatePersistResult{}, nil
 	}
 
