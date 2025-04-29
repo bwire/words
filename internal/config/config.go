@@ -9,4 +9,14 @@ const (
 
 	// Dictionary file name
 	Vocabulary = "words.json"
+
+	// Archive file name
+	Archive = "archive"
+
+	// Color scheme
+	ColorReset          = "\033[0m"
+	ColorProcessMessage = "\033[34m"
+	ColorError          = "\033[31m"
+	ColorResultMessage  = "\033[32m"
+	ColorPrompt         = "\033[35m"
 )

@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"os"
+	"words/internal/config"
 	"words/internal/state"
 
 	"github.com/rs/zerolog"
@@ -15,7 +16,7 @@ func initLogger() {
 
 func checkError(err error, userMsg string, techMsg string) {
 	if err != nil {
-		fmt.Println(userMsg)
+		fmt.Println(config.ColorError + userMsg + config.ColorReset)
 		log.Error().Err(err).Msg(techMsg)
 		os.Exit(1)
 	}

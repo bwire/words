@@ -2,7 +2,6 @@ package state
 
 import (
 	"bufio"
-	"errors"
 	"fmt"
 	"os"
 	"strings"
@@ -11,10 +10,7 @@ import (
 	"words/internal/model"
 )
 
-const (
-	msgInputError      = "input error: %w"
-	msgCancelledAdding = "Cancelled adding new words. Starting a new lesson"
-)
+const msgCancelledAdding = "Cancelled adding new words. Starting a new lesson"
 
 type StateAskNewWords struct{}
 
@@ -30,32 +26,46 @@ func (s StateAskNewWords) Execute(sm *StateMachine) (State, error) {
 		return StatePrepareDataForLesson{}, nil
 	}
 
-	enWord, err := askWord(reader, "Enter a new english word (phrase):")
-	if err != nil {
-		fmt.Println(msgCancelledAdding)
-		return nil, err
+	for {
+		enWord, err := askWord(reader, "Enter a new english word (phrase):")
+		if err != nil {
+			fmt.Println(ProcessMessage(msgCancelledAdding))
+			return nil, err
+		}
+
+		if enWord != "" {
+			ruWord, err := askWord(reader, "Enter the meaning of the new word (phrase):")
+			if err != nil {
+				fmt.Println(ProcessMessage(msgCancelledAdding))
+				return nil, err
+			}
+
+			if ruWord != "" {
+				newEntry := model.WordEntry{
+					Word:      enWord,
+					Meaning:   ruWord,
+					StartDate: time.Now().Format(config.DateFormat),
+					HitsCount: 0,
+					Progress:  0,
+				}
+				sm.ActiveWords = append(sm.ActiveWords, newEntry)
+
+				ok, err := askYesNo(reader, "Would you like to add another phrase (y/n)?")
+				if err != nil {
+					return nil, err
+				}
+				if !ok {
+					break
+				}
+			}
+		}
 	}
 
-	ruWord, err := askWord(reader, "Enter the meaning of the new word (phrase):")
-	if err != nil {
-		fmt.Println(msgCancelledAdding)
-		return nil, err
-	}
-
-	newEntry := model.WordEntry{
-		Word:      enWord,
-		Meaning:   ruWord,
-		StartDate: time.Now().Format(config.DateFormat),
-		HitsCount: 0,
-		Progress:  0,
-	}
-
-	sm.ActiveWords = append(sm.ActiveWords, newEntry)
 	return StatePrepareDataForLesson{}, nil
 }
 
 func askYesNo(reader *bufio.Reader, question string) (bool, error) {
-	fmt.Println(question)
+	fmt.Println(ProcessMessage(question))
 	for {
 		answer, err := reader.ReadString('\n')
 		if err != nil {
@@ -67,13 +77,13 @@ func askYesNo(reader *bufio.Reader, question string) (bool, error) {
 			return ok, nil
 		}
 
-		fmt.Println("Bad input! Should be y/n (or yes/no). Try once more, please:")
+		fmt.Println(ProcessMessage("Bad input! Should be y/n (or yes/no). Try once more, please:"))
 	}
 }
 
 func askWord(reader *bufio.Reader, prompt string) (string, error) {
 	for {
-		fmt.Println(prompt)
+		fmt.Println(PromptWordMessage(prompt))
 		word, err := reader.ReadString('\n')
 		if err != nil {
 			return "", fmt.Errorf(msgInputError, err)
@@ -89,7 +99,8 @@ func askWord(reader *bufio.Reader, prompt string) (string, error) {
 			return "", err
 		}
 		if ok {
-			return "", errors.New("cancelled by user. Starting a new lesson...")
+			fmt.Println(ProcessMessage("Cancelled by user. Starting a new lesson..."))
+			return "", nil
 		}
 	}
 }

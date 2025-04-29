@@ -9,7 +9,7 @@ import (
 type StateValidateDictionary struct{}
 
 func (s StateValidateDictionary) Execute(sm *StateMachine) (State, error) {
-	fmt.Println("Validating dictionary...")
+	fmt.Println(ProcessMessage("Validating dictionary..."))
 
 	if l := len(sm.ActiveWords); l < config.WordsInSet {
 		return nil, fmt.Errorf("not enough words in the dictionary (%v)! You should add some", l)
@@ -30,7 +30,7 @@ func (s StateValidateDictionary) Execute(sm *StateMachine) (State, error) {
 		}
 	}
 
-	fmt.Println("Dictionary data is valid!")
+	fmt.Println(ResultMessage("Dictionary data is valid!"))
 	fmt.Println()
 
 	return StateAskNewWords{}, nil

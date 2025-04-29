@@ -25,14 +25,14 @@ type Word struct {
 }
 
 func (s StatePrepareDataForLesson) Execute(sm *StateMachine) (State, error) {
-	fmt.Println("Preparing data for lesson...")
+	fmt.Println(ProcessMessage("Preparing data for lesson..."))
 
 	selectedSet, err := PrepareDataForLesson(sm.ActiveWords)
 	if err != nil {
 		return nil, err
 	}
 
-	fmt.Println("Words list is ready for lesson...")
+	fmt.Println(ResultMessage("Words list is ready for lesson..."))
 	fmt.Println()
 
 	return StateLesson{Words: selectedSet}, nil

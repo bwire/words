@@ -9,7 +9,7 @@ import (
 type StateLoadWords struct{}
 
 func (s StateLoadWords) Execute(sm *StateMachine) (State, error) {
-	fmt.Println("Loading active vocabulary...")
+	fmt.Println(ProcessMessage("Loading active vocabulary..."))
 
 	words, err := io.ReadWordList(config.Vocabulary)
 	if err != nil {
@@ -18,6 +18,6 @@ func (s StateLoadWords) Execute(sm *StateMachine) (State, error) {
 
 	sm.ActiveWords = words
 
-	fmt.Printf("Active dictionary conatins %v words and phrases for learning!\n\n", len(sm.ActiveWords))
+	fmt.Printf(ResultMessage("Active dictionary conatins %v words and phrases for learning!\n\n"), len(sm.ActiveWords))
 	return StateValidateDictionary{}, nil
 }
