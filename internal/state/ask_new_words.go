@@ -50,6 +50,10 @@ func (s StateAskNewWords) Execute(sm *StateMachine) (State, error) {
 				}
 				sm.ActiveWords = append(sm.ActiveWords, newEntry)
 
+				fmt.Println()
+				fmt.Printf(ResultMessage("New word (phrase) '%v' added to dictionary!"), newEntry.Word)
+				fmt.Println()
+
 				ok, err := askYesNo(reader, "Would you like to add another phrase (y/n)?")
 				if err != nil {
 					return nil, err

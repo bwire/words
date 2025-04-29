@@ -49,7 +49,7 @@ func appendToArchive(archiveWords []model.ArchiveEntry) error {
 		if err != nil {
 			return fmt.Errorf("failed to append word to archive: %w", err)
 		}
-		fmt.Printf(ResultMessage("Word (phrase) '%v' is learned and goes to the archive!\n"), aw)
+		fmt.Printf(ResultMessage("Word (phrase) '%v' is learned and goes to the archive!\n"), aw.Word)
 	}
 	return nil
 }

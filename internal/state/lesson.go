@@ -19,7 +19,7 @@ func (s StateLesson) Execute(sm *StateMachine) (State, error) {
 	for i := range s.Words {
 		v := &s.Words[i]
 
-		fmt.Printf(PromptWordMessage("%v: %v?\n"), i+1, v.Translation)
+		fmt.Printf(PromptWordMessage("%v: %v\n"), i+1, v.Translation)
 		answer, err := reader.ReadString('\n')
 		if err != nil {
 			return nil, fmt.Errorf(msgInputError, err)
@@ -27,7 +27,7 @@ func (s StateLesson) Execute(sm *StateMachine) (State, error) {
 
 		if strings.TrimSpace(answer) == v.Word {
 			v.Result = ResultCorrect
-			fmt.Printf(ResultMessage("This is the right answer. The progress is %v\n\n"), v.Progress+1)
+			fmt.Printf(ResultMessage("Correct answer!. The progress is %v\n\n"), v.Progress+1)
 		} else {
 			v.Result = ResultIncorrect
 			var progress = v.Progress
