@@ -51,7 +51,7 @@ func appendToArchive(archiveWords []model.ArchiveEntry) error {
 				return fmt.Errorf("failed to append word to archive: %w", err)
 			}
 			fmt.Printf(
-				ResultMessage("Word (phrase) '%v' is learned and goes to the archive! It took %v attempts to finish\n"),
+				ResultMessage("Word (phrase) '%v' is learned and goes to the archive! It took %v attempts to finish.\n"),
 				aw.Word,
 				aw.HitsCount,
 			)
