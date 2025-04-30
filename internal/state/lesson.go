@@ -27,14 +27,14 @@ func (s StateLesson) Execute(sm *StateMachine) (State, error) {
 
 		if strings.TrimSpace(answer) == v.Word {
 			v.Result = ResultCorrect
-			fmt.Printf(ResultMessage("Correct answer!. The progress is %v\n\n"), v.Progress+1)
+			fmt.Printf(ResultMessage("Correct answer!. The progress is %v!\n\n"), v.Progress+1)
 		} else {
 			v.Result = ResultIncorrect
 			var progress = v.Progress
 			if progress > 0 {
 				progress -= 1
 			}
-			fmt.Printf(ErrorMessage("This is not correct! The correct answer is '%v'! Progress goes down (%v)\n\n"), v.Word, progress)
+			fmt.Printf(ErrorMessage("This is not correct! The correct answer is '%v'! Progress goes down (%v)!\n\n"), v.Word, progress)
 		}
 	}
 

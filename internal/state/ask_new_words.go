@@ -81,7 +81,7 @@ func askYesNo(reader *bufio.Reader, question string) (bool, error) {
 			return ok, nil
 		}
 
-		fmt.Println(ProcessMessage("Bad input! Should be y/n (or yes/no). Try once more, please:"))
+		fmt.Println(ErrorMessage("Bad input! Should be y/n (or yes/no). Try once more, please:"))
 	}
 }
 
