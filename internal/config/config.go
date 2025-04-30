@@ -8,10 +8,10 @@ const (
 	WordsInSet = 10
 
 	// Dictionary file name
-	Vocabulary = "words.json"
+	Vocabulary = "./data/words.json"
 
 	// Archive file name
-	Archive = "archive"
+	Archive = "./data/archive"
 
 	// Color scheme
 	ColorReset          = "\033[0m"
