@@ -44,13 +44,18 @@ func appendToArchive(archiveWords []model.ArchiveEntry) error {
 
 	encoder := json.NewEncoder(f)
 
-	for _, aw := range archiveWords {
-		err := encoder.Encode(aw)
-		if err != nil {
-			return fmt.Errorf("failed to append word to archive: %w", err)
+	if len(archiveWords) > 0 {
+		for _, aw := range archiveWords {
+			err := encoder.Encode(aw)
+			if err != nil {
+				return fmt.Errorf("failed to append word to archive: %w", err)
+			}
+			fmt.Printf(ResultMessage("Word (phrase) '%v' is learned and goes to the archive!\n"), aw.Word)
 		}
-		fmt.Printf(ResultMessage("Word (phrase) '%v' is learned and goes to the archive!\n"), aw.Word)
+	} else {
+		fmt.Println(ResultMessage("No words to be archived!"))
 	}
+
 	return nil
 }
 
