@@ -16,9 +16,9 @@ func (s StatePersistResult) Execute(sm *StateMachine) (State, error) {
 
 	err := io.PersistResultToFile(config.Vocabulary, s.NewDictionary)
 	if err != nil {
-		return nil, fmt.Errorf("failed to save dictitionary: %w", err)
+		return nil, fmt.Errorf("failed to save dictionary: %w", err)
 	}
 
-	fmt.Println(ResultMessage("Dictionary successfully update! Exiting..."))
+	fmt.Printf(ResultMessage("Dictionary successfully update! %v phrases are still in progress. Exiting..."), len(s.NewDictionary))
 	return nil, nil
 }
