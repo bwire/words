@@ -19,6 +19,6 @@ func (s StatePersistResult) Execute(sm *StateMachine) (State, error) {
 		return nil, fmt.Errorf("failed to save dictionary: %w", err)
 	}
 
-	fmt.Printf(ResultMessage("Dictionary successfully update! %v phrases are still in progress. Exiting...\n"), len(s.NewDictionary))
+	fmt.Printf(ResultMessage("Dictionary successfully saved! %v phrases are still in progress. Exiting...\n"), len(s.NewDictionary))
 	return nil, nil
 }
