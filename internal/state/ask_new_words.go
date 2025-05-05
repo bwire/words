@@ -33,35 +33,39 @@ func (s StateAskNewWords) Execute(sm *StateMachine) (State, error) {
 			return nil, err
 		}
 
-		if enWord != "" {
-			ruWord, err := askWord(reader, "Enter the meaning of the new word (phrase):")
-			if err != nil {
-				fmt.Println(ProcessMessage(msgCancelledAdding))
-				return nil, err
-			}
+		if enWord == "" {
+			break
+		}
 
-			if ruWord != "" {
-				newEntry := model.WordEntry{
-					Word:      enWord,
-					Meaning:   ruWord,
-					StartDate: time.Now().Format(config.DateFormat),
-					HitsCount: 0,
-					Progress:  0,
-				}
-				sm.ActiveWords = append(sm.ActiveWords, newEntry)
+		ruWord, err := askWord(reader, "Enter the meaning of the new word (phrase):")
+		if err != nil {
+			fmt.Println(ProcessMessage(msgCancelledAdding))
+			return nil, err
+		}
 
-				fmt.Println()
-				fmt.Printf(ResultMessage("New word (phrase) '%v' added to dictionary!"), newEntry.Word)
-				fmt.Println()
+		if ruWord == "" {
+			break
+		}
 
-				ok, err := askYesNo(reader, "Would you like to add another phrase (y/n)?")
-				if err != nil {
-					return nil, err
-				}
-				if !ok {
-					break
-				}
-			}
+		newEntry := model.WordEntry{
+			Word:      enWord,
+			Meaning:   ruWord,
+			StartDate: time.Now().Format(config.DateFormat),
+			HitsCount: 0,
+			Progress:  0,
+		}
+		sm.ActiveWords = append(sm.ActiveWords, newEntry)
+
+		fmt.Println()
+		fmt.Printf(ResultMessage("New word (phrase) '%v' added to dictionary!"), newEntry.Word)
+		fmt.Println()
+
+		ok, err := askYesNo(reader, "Would you like to add another phrase (y/n)?")
+		if err != nil {
+			return nil, err
+		}
+		if !ok {
+			break
 		}
 	}
 
